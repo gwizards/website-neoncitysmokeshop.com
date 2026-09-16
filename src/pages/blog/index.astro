@@ -1,10 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import posts from '../../data/blog.json';
+import { site } from '../../../shared/site';
 const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T12:00:00Z`));
+const blogSchema = {
+  '@type': 'CollectionPage',
+  '@id': `${site.origin}/blog/#page`,
+  name: 'Neon City Smoking and Vaping Guides',
+  description: 'Guides about pipes, cigars, hookahs, vaping, e-cigarettes, and smoking-accessory care.',
+  isPartOf: { '@id': `${site.origin}/#website` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: posts.map((post, index) => ({ '@type': 'ListItem', position: index + 1, url: new URL(`/${post.slug}/`, site.origin).href, name: post.title })),
+  },
+};
 ---
-<Layout title="Blog · Neon City" description="Source articles from the Neon City Smoke Shop archive about pipes, cigars, hookahs, vapes, and smoking-accessory care.">
-  <section class="page-hero"><div class="shell"><p class="eyebrow">Neon City blog</p><h1>Journey into the vaping universe</h1><p>Explore the original Neon City archive of stories, tips, product-care guides, and industry information. This development migration preserves the published source material for review.</p></div></section>
+<Layout title="Neon City | Smoking and Vaping Guides" description="Read Neon City guides about pipes, cigars, hookahs, vaping, e-cigarettes, and smoking-accessory care." schema={blogSchema}>
+  <section class="page-hero"><div class="shell"><p class="eyebrow">Neon City blog</p><h1>Journey into the vaping universe</h1><p>Explore practical guides, product-care tips, and introductory information about pipes, cigars, hookahs, vaping, and smoking accessories.</p></div></section>
   <section class="blog-index"><div class="shell blog-grid">
     {posts.map(post => <article class="blog-card">
       <a class="blog-card-image" href={`/${post.slug}/`}><img src={post.image} width="960" height="640" loading="lazy" alt={post.imageAlt} /></a>

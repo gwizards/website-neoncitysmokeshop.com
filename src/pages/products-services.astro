@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+const groups = [
+  { icon: '/images/icon-hookahs.png', title: 'Hookahs and shisha', text: 'Hookahs and shisha products for adult customers seeking a social smoking setup.' },
+  { icon: '/images/icon-bongs.png', title: 'Bongs', text: 'Glass and other bong styles, with accessories for cleaning and regular care.' },
+  { icon: '/images/icon-pipes.png', title: 'Pipes', text: 'Classic and modern pipes selected for function, material, and style.' },
+  { icon: '/images/icon-vapes.png', title: 'Vaping and vape juice', text: 'Vaping devices and e-liquids for adults, with help understanding device types.' },
+  { icon: '/images/icon-e-cigs.png', title: 'E-cigarettes and cigarettes', text: 'Electronic and traditional cigarette categories for customers aged 21 and older.' },
+  { icon: '/images/icon-additional.png', title: 'Lifestyle and accessories', text: 'Rolling papers, grinders, oil burners, jewelry, sunglasses, false lashes, and related accessories.' },
+];
+---
+<Layout title="Neon City | Las Vegas Smoke Shop Products" description="Explore the adult-only smoking essentials, vaping products, cigarettes, lifestyle items, and accessories available at Neon City in Las Vegas." image="/images/neon-city-essentials.webp">
+  <section class="page-hero"><div class="shell"><p class="eyebrow">Products and services</p><h1>21+? Explore Neon City</h1><p>Review the product categories available at the Las Vegas shop. Availability and selection may change; contact the store for current information.</p></div></section>
+  <div class="content-page">
+    <section class="shell content-copy intro-copy"><h2>Smoking essentials for adults</h2><p>Neon City offers tobacco and nicotine products, smoking essentials, and lifestyle accessories for customers aged 21 and older. The shop can explain the available categories and help visitors understand product care.</p></section>
+    <section class="shell product-grid">{groups.map(group => <article class="product-card"><img src={group.icon} width="96" height="96" alt="" loading="lazy" /><h2>{group.title}</h2><p>{group.text}</p></article>)}</section>
+    <section class="content-dark"><div class="shell content-copy"><p class="eyebrow">Before visiting</p><h2>Current selection and age requirements</h2><p>The Astro website does not publish live inventory or process purchases. Use the external Order Online button for the existing QuickVee merchant, or contact the physical shop to ask about current availability. Identification is required for transactions, and sales are restricted to adults aged 21 and older.</p><div class="article-actions"><a class="button" href="/location/">Visit the shop <span aria-hidden="true">›</span></a><a class="button" href="/contact-us/">Contact us <span aria-hidden="true">›</span></a></div></div></section>
+  </div>
+</Layout>

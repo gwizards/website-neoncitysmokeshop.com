@@ -1,14 +1,27 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
-for(const path of ['index.html','privacy/index.html','404.html']){
- const html=readFileSync('dist/'+path,'utf8');
+const pagePaths=['index.html','about/index.html','products-services/index.html','location/index.html','contact-us/index.html','blog/index.html','author/hernan-diego-velarde/index.html','thank-you-for-contacting-us/index.html','privacy/index.html','404.html'];
+const assertDocument=(html,path)=>{
  assert.match(html,/name="robots" content="noindex, nofollow, noarchive"/);
  assert.doesNotMatch(html,/<link[^>]+rel="(?:canonical|sitemap)"/);
  assert.doesNotMatch(html,/googletagmanager|google-analytics|wp-content|add to cart|shopping cart|checkout/i);
- assert.doesNotMatch(html,/<script(?![^>]*src=)[^>]*>/,'Executable scripts must be external for CSP');
+ const scripts=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)];
+ for(const [,attrs,body] of scripts)if(!/\bsrc=/.test(attrs)){
+   assert.match(attrs,/type="application\/ld\+json"/,'Executable scripts must be external for CSP');
+   assert.doesNotThrow(()=>JSON.parse(body),`Invalid JSON-LD in ${path}`);
+ }
+ assert.equal((html.match(/<h1[ >]/g)||[]).length,1,`Expected one H1 in ${path}`);
+ assert.match(html,/<meta property="og:title"/);
+ assert.match(html,/<meta property="og:description"/);
+ assert.match(html,/<meta property="og:image"/);
+ assert.match(html,/<script type="application\/ld\+json">/);
  for(const match of html.matchAll(/(?:href|src|poster|data-src)="(\/[^"#?]+)[^"]*"/g)){
    const p=match[1];assert(existsSync('dist'+p) || existsSync('dist'+p+'index.html'),'Missing local asset '+p);
  }
+};
+for(const path of pagePaths){
+ const html=readFileSync('dist/'+path,'utf8');
+ assertDocument(html,path);
 }
 const home=readFileSync('dist/index.html','utf8');
 assert.match(home,/id="age-gate"[^>]*role="dialog"[^>]*aria-modal="true"/);
@@ -26,9 +39,11 @@ for(const post of posts){
  assert(existsSync(`dist/${post.slug}/index.html`),`Missing article route ${post.slug}`);
  assert(existsSync(`dist${post.image}`),`Missing article image ${post.image}`);
  const article=readFileSync(`dist/${post.slug}/index.html`,'utf8');
+ assertDocument(article,`${post.slug}/index.html`);
  const escapedTitle=post.title.replaceAll('&','&amp;').replaceAll("'",'&#39;').replaceAll('<','&lt;').replaceAll('>','&gt;');
  assert(article.includes(`<h1>${escapedTitle}</h1>`),`Incorrect article heading ${post.slug}`);
- assert.doesNotMatch(article,/wp-content|<script(?![^>]*src=)/i);
+ assert.doesNotMatch(article,/wp-content/i);
+ assert.match(article,/"@type":"BlogPosting"/);
 }
 assert.match(readFileSync('dist/robots.txt','utf8'),/Disallow: \//);
 assert(!readdirSync('dist').some(f=>/sitemap|llms/.test(f)));

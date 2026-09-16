@@ -54,6 +54,13 @@ describe('support delivery boundary',()=>{
  it('puts noindex and security headers on missing pages and API errors',async()=>{
   for(const url of ['/missing','/api/missing','/api/contact']){const r=await worker.fetch(new Request(env.SITE_ORIGIN+url),env);expect(r.headers.get('X-Robots-Tag')).toContain('noindex');expect(r.headers.get('Content-Security-Policy')).toContain("frame-ancestors 'none'");}
  });
+ it('caches versioned bundles and media while keeping documents non-cacheable',async()=>{
+  const assetEnv={...env,ASSETS:{fetch:vi.fn(async()=>new Response('asset',{status:200}))}} as any;
+  expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/_astro/site.hash.js'),assetEnv)).headers.get('Cache-Control')).toContain('immutable');
+  expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/images/neon-city-full-logo.webp'),assetEnv)).headers.get('Cache-Control')).toContain('stale-while-revalidate');
+  expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/about/'),assetEnv)).headers.get('Cache-Control')).toBe('no-store');
+  expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/version.json'),assetEnv)).headers.get('Cache-Control')).toBe('no-store');
+ });
 });
 describe('notification context and escaping',()=>{
  it('omits unavailable context and raw IP',()=>{const c=requestContext(request());expect(JSON.stringify(c)).not.toMatch(/192\.0\.2\.1|undefined/);});

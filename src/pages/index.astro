@@ -2,29 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import VideoHero from '../components/VideoHero.astro';
 import SupportSections from '../components/SupportSections.astro';
-import { site, topics } from '../../shared/site';
-const sitekey = site.turnstileSitekey;
+import ContactForm from '../components/ContactForm.astro';
 ---
-<Layout title="Neon City | Your Las Vegas Smoke Shop!" description="Learn about Neon City Smoke Shop and contact the team about administration, accessibility, privacy, or website feedback.">
+<Layout title="Neon City | Your Las Vegas Smoke Shop!" description="Visit Neon City Smoke Shop in Las Vegas for adult smoking essentials and accessories, or find the shop's location, hours, articles, and contact information.">
   <VideoHero />
-  <section id="about" class="about-section"><div class="shell about-grid"><div class="brand-panel source-photo"><picture><source srcset="/images/neon-city-about.avif" type="image/avif" /><img src="/images/neon-city-about.webp" width="800" height="1067" alt="Portrait in drifting smoke" loading="lazy" /></picture></div><div><p class="eyebrow">About us</p><h2>Who we are</h2><p>Neon City Smoke Shop, we take immense pride in our role as a premier destination for discerning smoking product enthusiasts. Nestled within the lively heart of Las Vegas, our establishment embodies a commitment to excellence and innovation in every aspect of the smoking experience.</p><p>Our story begins with a passion for curating the finest selection of smoking accessories available. We believe that every customer deserves access to high-quality products that enhance their smoking journey. With this vision in mind, we’ve meticulously curated our inventory to showcase an unparalleled variety of smoking essentials.</p><a class="button" href="#information">More about us <span aria-hidden="true">›</span></a></div></div></section>
+  <section id="about" class="about-section"><div class="shell about-grid"><div class="brand-panel source-photo"><picture><source srcset="/images/neon-city-about.avif" type="image/avif" /><img src="/images/neon-city-about.webp" width="800" height="1067" alt="Portrait in drifting smoke" loading="lazy" /></picture></div><div><p class="eyebrow">About us</p><h2>Who we are</h2><p>Neon City Smoke Shop, we take immense pride in our role as a premier destination for discerning smoking product enthusiasts. Nestled within the lively heart of Las Vegas, our establishment embodies a commitment to excellence and innovation in every aspect of the smoking experience.</p><p>Our story begins with a passion for curating the finest selection of smoking accessories available. We believe that every customer deserves access to high-quality products that enhance their smoking journey. With this vision in mind, we’ve meticulously curated our inventory to showcase an unparalleled variety of smoking essentials.</p><a class="button" href="/about/">More about us <span aria-hidden="true">›</span></a></div></div></section>
   <SupportSections />
-  <section id="support" class="contact-section"><div class="contact shell">
-    <div class="contact-copy"><p class="eyebrow">LET’S TALK</p><h2>How can<br />we help?</h2><p>Choose a topic and leave a message. Include the details we need to understand your request.</p><div class="email-block"><span>PREFER EMAIL?</span><a href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">↗</span></a></div><p class="muted">For administrative and website support only. Please don’t include payment details, identity documents, or other sensitive information.</p></div>
-    <form id="contact-form" aria-labelledby="form-title">
-      <h3 id="form-title">Send a message</h3>
-      <p class="disclosure">This is a test form. Messages go to the website owner’s development review inbox, not the public contact mailbox. All fields are required.</p>
-      <div class="field-pair"><label>Your name<input name="name" autocomplete="name" required minlength="2" maxlength="100" /></label><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" /></label></div>
-      <label>What is this about?<select name="topic" required><option value="">Choose a topic</option>{topics.map(topic => <option value={topic}>{topic}</option>)}</select></label>
-      <label>Your message<textarea name="message" rows="5" required minlength="20" maxlength="3000" aria-describedby="message-help" placeholder="Describe your request"></textarea><span id="message-help" class="field-help">20–3,000 characters. Include a page address if you are reporting a website problem.</span></label>
-      <label class="trap" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label>
-      <label class="consent"><input type="checkbox" name="consent" required /><span>I agree to the processing described in the <a href="/privacy/">privacy notice</a> so the team can respond.</span></label>
-      <p class="disclosure">Cloudflare provides bot protection and approximate request context. Resend delivers your message. <a href="/privacy/">Learn what is included.</a></p>
-      <div id="turnstile-widget" data-sitekey={sitekey}></div>
-      <button class="button" type="submit" disabled>Send message <span aria-hidden="true">↗</span></button>
-      <p id="form-status" role="status" aria-live="polite">Loading secure form…</p>
-      <noscript><p>JavaScript is required for secure submissions. Please use the email link to contact us.</p></noscript>
-    </form>
-  </div></section>
-  <script src="../scripts/contact.ts"></script>
+  <ContactForm heading="How can we help?" />
 </Layout>

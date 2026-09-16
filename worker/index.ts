@@ -57,8 +57,9 @@ export async function contact(request: Request, env: Bindings): Promise<Response
 }
 const csp="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 export default { async fetch(request: Request, env: Bindings): Promise<Response> {
+  const path=new URL(request.url).pathname;
   let response:Response;
-  try { response=new URL(request.url).pathname.startsWith('/api/') ? new URL(request.url).pathname==='/api/contact' ? await contact(request,env) : json(404,'not_found') : await env.ASSETS.fetch(request); }
+  try { response=path.startsWith('/api/') ? path==='/api/contact' ? await contact(request,env) : json(404,'not_found') : await env.ASSETS.fetch(request); }
   catch {response=json(503,'unavailable');}
   const out=new Response(response.body,response);
   out.headers.set('X-Robots-Tag','noindex, nofollow, noarchive');
@@ -67,6 +68,8 @@ export default { async fetch(request: Request, env: Bindings): Promise<Response>
   out.headers.set('Referrer-Policy','strict-origin-when-cross-origin');
   out.headers.set('Permissions-Policy','camera=(), microphone=(), geolocation=()');
   out.headers.set('Strict-Transport-Security','max-age=31536000');
-  if(!new URL(request.url).pathname.startsWith('/_astro/'))out.headers.set('Cache-Control','no-store');
+  if(path.startsWith('/_astro/'))out.headers.set('Cache-Control','public, max-age=31536000, immutable');
+  else if(/\.(?:avif|webp|png|svg|woff2|mp4)$/i.test(path))out.headers.set('Cache-Control','public, max-age=86400, stale-while-revalidate=604800');
+  else out.headers.set('Cache-Control','no-store');
   return out;
 }} satisfies ExportedHandler<Bindings>;

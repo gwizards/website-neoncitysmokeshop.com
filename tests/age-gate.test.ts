@@ -39,7 +39,7 @@ it('stores session confirmation, unlocks the page, and announces acceptance', as
   expect(page.store.get('neon-age-confirmed')).toBe('yes');
   expect(page.classes.has('age-confirmed')).toBe(true);
   expect(page.regions.every(region => region.removeAttribute.mock.calls[0]?.[0] === 'inert')).toBe(true);
-  expect(page.main.focus).toHaveBeenCalledOnce();
+  expect(page.main.focus).toHaveBeenCalledWith({ preventScroll: true });
   expect(page.dispatch).toHaveBeenCalledOnce();
 });
 

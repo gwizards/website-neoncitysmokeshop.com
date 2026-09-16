@@ -22,7 +22,7 @@ if (gate && confirm) {
     confirm.addEventListener('click', () => {
       sessionStorage.setItem('neon-age-confirmed', 'yes');
       closeGate();
-      document.querySelector<HTMLElement>('#main')?.focus();
+      document.querySelector<HTMLElement>('#main')?.focus({ preventScroll: true });
     });
     gate.addEventListener('keydown', event => {
       if (event.key !== 'Tab') return;

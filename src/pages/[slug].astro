@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import posts from '../data/blog.json';
+import { site } from '../../shared/site';
 
 export function getStaticPaths() {
   return posts.map(post => ({ params: { slug: post.slug }, props: { post } }));
@@ -8,12 +9,26 @@ export function getStaticPaths() {
 
 const { post } = Astro.props;
 const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T12:00:00Z`));
+const articleUrl = new URL(`/${post.slug}/`, site.origin).href;
+const articleSchema = {
+  '@type': 'BlogPosting',
+  '@id': `${articleUrl}#article`,
+  headline: post.title,
+  description: post.description,
+  datePublished: post.date,
+  dateModified: post.modified,
+  image: new URL(post.image, site.origin).href,
+  mainEntityOfPage: articleUrl,
+  author: { '@type': 'Organization', name: post.author, '@id': `${site.origin}/#business` },
+  publisher: { '@id': `${site.origin}/#business` },
+  isPartOf: { '@id': `${site.origin}/#website` },
+};
 ---
-<Layout title={`${post.title} · Neon City`} description={post.description}>
+<Layout title={`${post.title} · Neon City`} description={post.description} image={post.image} pageType="article" schema={articleSchema}>
   <article class="article-page">
     <header class="article-header shell"><p class="eyebrow">Neon City blog</p><h1>{post.title}</h1><p class="article-meta">Source archive · <time datetime={post.date}>{formatDate(post.date)}</time></p></header>
     <div class="article-hero shell"><img src={post.image} width="1920" height="1280" alt={post.imageAlt} /></div>
     <div class="article-body shell" set:html={post.body} />
-    <aside class="article-cta"><div class="shell"><p class="eyebrow">Neon City</p><h2>Visit or contact the shop</h2><p>Find the Las Vegas address and opening hours, or send the team a message.</p><div class="article-actions"><a class="button" href="/#location">Location <span aria-hidden="true">›</span></a><a class="button" href="/#support">Contact us <span aria-hidden="true">›</span></a></div></div></aside>
+    <aside class="article-cta"><div class="shell"><p class="eyebrow">Neon City</p><h2>Visit or contact the shop</h2><p>Find the Las Vegas address and opening hours, or send the team a message.</p><div class="article-actions"><a class="button" href="/location/">Location <span aria-hidden="true">›</span></a><a class="button" href="/contact-us/">Contact us <span aria-hidden="true">›</span></a></div></div></aside>
   </article>
 </Layout>

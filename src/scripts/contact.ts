@@ -9,6 +9,9 @@ let token = '';
 let widgetId: string | undefined;
 let busy = false;
 let verificationMessage = true;
+let formIsNearViewport = false;
+let ageConfirmed = document.body.classList.contains('age-confirmed');
+let turnstileRequested = false;
 const showVerification = (message: string) => {
   if (!busy) { verificationMessage = true; status.textContent = message; }
 };
@@ -21,11 +24,34 @@ window.neonTurnstileReady = () => {
     'error-callback': () => { token = ''; button.disabled = true; showVerification('Verification could not load. Refresh this page or use the email link.'); },
   });
 };
-const script = document.createElement('script');
-script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=neonTurnstileReady&render=explicit';
-script.async = true;
-script.onerror = () => { status.textContent = 'Verification is unavailable. Please use the email link.'; };
-document.head.append(script);
+const loadTurnstile = () => {
+  if (turnstileRequested || !ageConfirmed || !formIsNearViewport) return;
+  turnstileRequested = true;
+  status.textContent = 'Loading secure form…';
+  const script = document.createElement('script');
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=neonTurnstileReady&render=explicit';
+  script.async = true;
+  script.onerror = () => { status.textContent = 'Verification is unavailable. Please use the email link.'; };
+  document.head.append(script);
+};
+
+window.addEventListener('neon-age-accepted', () => {
+  ageConfirmed = true;
+  loadTurnstile();
+});
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    formIsNearViewport = true;
+    observer.disconnect();
+    loadTurnstile();
+  }, { rootMargin: '500px 0px' });
+  observer.observe(form);
+} else {
+  formIsNearViewport = true;
+  loadTurnstile();
+}
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (busy || !token || !form.reportValidity()) return;
