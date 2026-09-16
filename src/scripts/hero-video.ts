@@ -7,6 +7,7 @@ let userPaused = false;
 let visible = false;
 let playingBeforeHidden = false;
 let failed = false;
+let ageConfirmed = document.body.classList.contains('age-confirmed');
 const label = () => { toggle.textContent = video.paused ? 'Play background video' : 'Pause background video'; };
 const start = async () => {
   if (!video.src) video.src = video.dataset.src!;
@@ -21,7 +22,7 @@ video.addEventListener('play', label);
 video.addEventListener('pause', label);
 video.addEventListener('error', () => { failed = true; video.pause(); video.removeAttribute('src'); video.load(); toggle.hidden = true; });
 reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { userPaused = true; video.pause(); } });
-const canAutoplay = () => !failed && !userPaused && !reducedMotion.matches && !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType || '');
+const canAutoplay = () => ageConfirmed && !failed && !userPaused && !reducedMotion.matches && !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType || '');
 new IntersectionObserver(entries => {
   visible = entries[0].isIntersecting;
   if (!visible) video.pause();
@@ -30,4 +31,8 @@ new IntersectionObserver(entries => {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { playingBeforeHidden = !video.paused; video.pause(); }
   else if (playingBeforeHidden && visible && canAutoplay()) void start();
+});
+window.addEventListener('neon-age-accepted', () => {
+  ageConfirmed = true;
+  if (visible && !document.hidden && canAutoplay()) void start();
 });

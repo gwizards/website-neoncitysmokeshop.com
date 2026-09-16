@@ -10,6 +10,11 @@ for(const path of ['index.html','privacy/index.html','404.html']){
    const p=match[1];assert(existsSync('dist'+p) || existsSync('dist'+p+'index.html'),'Missing local asset '+p);
  }
 }
+const home=readFileSync('dist/index.html','utf8');
+assert.match(home,/id="age-gate"[^>]*role="dialog"[^>]*aria-modal="true"/);
+assert.match(home,/You must be over the age of 21 to visit this website/);
+assert.match(home,/data-src="\/video\/neon-final\.mp4"/);
+assert.match(home,/neon-city-header-logo\.webp/);
 assert.match(readFileSync('dist/robots.txt','utf8'),/Disallow: \//);
 assert(!readdirSync('dist').some(f=>/sitemap|llms/.test(f)));
 const c=JSON.parse(readFileSync('wrangler.jsonc','utf8'));

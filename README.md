@@ -1,7 +1,8 @@
 # Neon City information and support
 
-Approved non-promotional Astro website at https://dev.neoncitysmokeshop.com.
-This is a development preview, not a full replica or replacement of the commercial WordPress site.
+Approved age-gated informational and administrative Astro website at https://dev.neoncitysmokeshop.com.
+This is a development preview, not a replacement of the commercial WordPress site, and it
+does not process purchases.
 
 ## Development
 
@@ -52,7 +53,7 @@ from the SiteGround backup is a separate procedure and has not been rehearsed.
 
 ## Decorative video
 
-The current preview uses the abstract colored-smoke footage recovered from the
-original SiteGround backup, re-encoded without audio. See `docs/ORIGINAL-VIDEO.md`
-for provenance, original section mapping, and reproduction commands.
-The earlier generated-curve asset and generator remain available as a fallback.
+The hero uses the original `Neon-Final.mp4` footage recovered from the SiteGround
+backup, re-encoded without audio and held until the visitor confirms they are 21 or older.
+An original abstract colored-smoke still remains on the contact section. See
+`docs/ORIGINAL-VIDEO.md` for provenance and original section mapping.

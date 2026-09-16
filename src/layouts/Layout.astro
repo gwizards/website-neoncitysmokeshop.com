@@ -1,5 +1,6 @@
 ---
 import '../styles/site.css';
+import AgeGate from '../components/AgeGate.astro';
 interface Props { title: string; description: string }
 const { title, description } = Astro.props;
 ---
@@ -16,10 +17,11 @@ const { title, description } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <AgeGate />
     <a class="skip" href="#main">Skip to content</a>
-    <div class="preview"><span class="dot"></span> Development preview <span class="preview-note">· Support & information</span></div>
-    <header><div class="shell header-inner"><a class="brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-logo.webp" width="250" height="98" alt="Neon City" /></a><nav aria-label="Main navigation"><a href="/#about">About</a><a href="/#information">Information</a><a href="/privacy/">Privacy</a><a class="header-contact" href="/#support">Contact us</a></nav></div></header>
+    <div class="preview"><span class="preview-source">Anybody who’s 21+ and enjoys smoking a cigarette, or perhaps something more relaxing</span><span class="preview-note">Development preview</span></div>
+    <header><div class="shell header-inner"><a class="brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-header-logo.webp" width="250" height="98" alt="Neon City Smoke Shop" /></a><nav aria-label="Main navigation"><a href="/#about">About</a><a href="/#information">Products &amp; services</a><a href="/#questions">Information</a><a href="/privacy/">Privacy</a><a class="header-contact" href="/#support">Contact us</a></nav></div></header>
     <main id="main" tabindex="-1"><slot /></main>
-    <footer><div class="shell footer-inner"><a class="footer-brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-logo.webp" width="250" height="98" alt="Neon City" /><span>Information. Accessibility. Support.</span></a><div><h2>Main menu</h2><a href="/">Home</a><a href="/#about">About this website</a><a href="/#support">Contact us</a></div><div><h2>Information</h2><a href="/#questions">Common questions</a><a href="/privacy/">Privacy notice</a><p>Development website · For testing</p></div></div></footer>
+    <footer><div class="shell footer-inner"><a class="footer-brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-header-logo.webp" width="250" height="98" alt="Neon City Smoke Shop" /><span>Las Vegas identity. Information. Support.</span></a><div><h2>Main menu</h2><a href="/">Home</a><a href="/#about">About us</a><a href="/#information">Products &amp; services</a><a href="/#support">Contact us</a></div><div><h2>Information</h2><a href="/#questions">Common questions</a><a href="/privacy/">Privacy notice</a><p>Development website · For testing</p></div></div></footer>
   </body>
 </html>

@@ -1,12 +1,11 @@
 ---
-import { site } from '../../shared/site';
 const cards = [
-  { number: '01', title: 'Administration', text: 'Send general correspondence to the team.', href: '#support' },
-  { number: '02', title: 'Accessibility', text: 'Describe a page or interaction that is difficult to use.', href: '#support' },
-  { number: '03', title: 'Privacy requests', text: 'Ask about information you have shared with us.', href: '#support' },
-  { number: '04', title: 'Website feedback', text: 'Report a broken link, unclear detail, or website issue.', href: '#support' },
-  { number: '05', title: 'Direct email', text: 'Use your email app to send your message.', href: `mailto:${site.email}` },
-  { number: '06', title: 'Privacy notice', text: 'Read how this support website handles your information.', href: '/privacy/' },
+  { image: '/images/icon-hookahs.png', title: 'Hookahs', text: 'Explore our exquisite collection of hookahs.' },
+  { image: '/images/icon-bongs.png', title: 'Bongs', text: 'Discover a variety of bongs.' },
+  { image: '/images/icon-pipes.png', title: 'Pipes', text: 'Functional and stylish pipes.' },
+  { image: '/images/icon-e-cigs.png', title: 'E-cigs', text: 'Explore the world of electronic cigarettes.' },
+  { image: '/images/icon-vapes.png', title: 'Vapes', text: 'Find the perfect vape for your taste.' },
+  { image: '/images/icon-additional.png', title: 'Additional', text: 'Browse through false lashes, sunglasses, jewelry, and more.' },
 ];
 const questions = [
   { question: 'What can I use this website for?', answer: 'This website is for general administration, website accessibility, privacy requests, and website feedback. Select the relevant topic in the contact form so the team can understand your message.' },
@@ -15,6 +14,6 @@ const questions = [
   { question: 'What if the form does not send?', answer: 'Check the required fields and complete the security verification. If delivery cannot be confirmed, retry once or use the email link. A successful submission displays a confirmation below the button.' },
 ];
 ---
-<section id="information" class="information-section"><div class="shell"><p class="eyebrow">Find the right place</p><h2>Information & support</h2><div class="support-grid"><div class="support-column">{cards.slice(0,3).map(card => <a class="support-card" href={card.href}><span class="support-number" aria-hidden="true">{card.number}</span><div><h3>{card.title}</h3><p>{card.text}</p></div><span class="support-arrow" aria-hidden="true">›</span></a>)}</div><div class="support-center" aria-hidden="true"><div class="neon-frame"><img src="/images/neon-city-logo.webp" width="768" height="301" alt="" loading="lazy" /></div></div><div class="support-column">{cards.slice(3).map(card => <a class="support-card" href={card.href}><span class="support-number" aria-hidden="true">{card.number}</span><div><h3>{card.title}</h3><p>{card.text}</p></div><span class="support-arrow" aria-hidden="true">›</span></a>)}</div></div></div></section>
+<section id="information" class="information-section"><div class="shell"><h2>Diverse smoking essentials</h2><p class="age-section-note">For adults aged 21 and over. Category information only; this development preview does not process purchases.</p><div class="support-grid"><div class="support-column">{cards.slice(0,3).map(card => <article class="support-card"><img src={card.image} width="96" height="96" alt="" loading="lazy" /><div><h3>{card.title}</h3><p>{card.text}</p></div></article>)}</div><div class="support-center"><div class="neon-frame source-photo"><picture><source srcset="/images/neon-city-essentials.avif" type="image/avif" /><img src="/images/neon-city-essentials.webp" width="800" height="1251" alt="Monochrome smoke portrait" loading="lazy" /></picture></div></div><div class="support-column">{cards.slice(3).map(card => <article class="support-card"><img src={card.image} width="96" height="96" alt="" loading="lazy" /><div><h3>{card.title}</h3><p>{card.text}</p></div></article>)}</div></div></div></section>
 <section id="questions" class="questions-section"><div class="shell questions-grid"><div><p class="eyebrow">Before you get in touch</p><h2>A little more<br />information</h2><p>Useful details about this support website and sending a message.</p></div><div class="questions-list">{questions.map(item => <details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
-<section class="contact-banner"><div class="shell"><p class="eyebrow">Contact</p><h2>Start a conversation</h2><p>Choose a topic, share the details, and tell us how to reach you.</p><a class="button" href="#support">Contact us <span aria-hidden="true">›</span></a></div></section>
+<section class="contact-banner"><div class="shell"><p class="eyebrow">Contact</p><h2>Elevate your experience</h2><p>Do you have any questions or comments? Feel free to get in touch with us. Use the protected form below or the public contact email.</p><a class="button" href="#support">Contact us <span aria-hidden="true">›</span></a></div></section>

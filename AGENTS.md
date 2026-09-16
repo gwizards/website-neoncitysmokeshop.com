@@ -2,9 +2,10 @@
 
 Site id: `neoncitysmokeshop`. Read `README.md` and `docs/IMPLEMENTATION.md` first.
 
-This repository is a non-promotional administrative support preview authorized for
-`https://dev.neoncitysmokeshop.com`. Do not add product promotions, shopping links,
-sales forms, or production routes. Production WordPress remains separate.
+This repository is an age-gated informational and administrative support preview authorized
+for `https://dev.neoncitysmokeshop.com`. Source-derived product-category information and
+brand imagery may be shown for migration fidelity. Do not add shopping links, sales forms,
+checkout behavior, or production routes. Production WordPress remains separate.
 
 - Preserve existing user work. Do not commit or push without authorization.
 - Run `npm run quality` before deploying. Use the exact dev Wrangler configuration.
