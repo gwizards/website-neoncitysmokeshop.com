@@ -86,3 +86,19 @@ screen-reader coverage, and production launch remain separate review items.
   three-column category layout with all six original icons.
 - The final release handoff records the subsequent documentation commit and Cloudflare
   version so Git, `/version.json`, and the deployed Worker can be compared exactly.
+
+## Detailed parity follow-up
+
+- Removed the invented hero subtitle and call-to-action so the hero contains the original
+  heading over `Neon-Final.mp4`, matching the source homepage.
+- Matched the source age-gate line break and “Yes I am over 21” label while retaining the
+  session-only confirmation note and stronger background isolation.
+- Restored the original 38.96-second colored-smoke contact video. It is requested only after
+  age confirmation and only when the section is visible; reduced-motion, data-saver, 2G,
+  visibility, failure, and manual pause states keep the poster as the fallback.
+- Restored the complete source contact paragraph, sticky masthead treatment, source homepage
+  title, About button label, category-to-contact section order, and footer location, hours,
+  phone, email, Instagram, TikTok, copyright, and designer attribution.
+- Kept the protected development contact form immediately after the source-derived homepage
+  sections because it is part of the approved migration work. The preview still has no order
+  button, cart, checkout, inventory, or purchase processing.
