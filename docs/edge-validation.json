@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-09-16T17:44:08.235640+00:00",
+  "url": "https://dev.neoncitysmokeshop.com",
+  "dns": "Public and local DNS resolved normally; HTTPS requests used the hostname and normal TLS verification",
+  "version": {
+    "site": "neon-city-support",
+    "environment": "development",
+    "sourceSha256": "61fb0b6a4afa3a24683165ae53051385003cdbfcac2797e7cc12e5150efd036a",
+    "commit": null,
+    "committed": false,
+    "buildTime": "2026-09-16T17:43:16.967Z"
+  },
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "noindex": true
+    },
+    {
+      "path": "/privacy/",
+      "status": 200,
+      "noindex": true
+    },
+    {
+      "path": "/missing-page/",
+      "status": 404,
+      "noindex": true
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "noindex": true
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 404,
+      "noindex": true
+    },
+    {
+      "path": "/llms.txt",
+      "status": 404,
+      "noindex": true
+    },
+    {
+      "path": "/api/contact",
+      "status": 405,
+      "noindex": true
+    },
+    {
+      "check": "foreign-origin",
+      "status": 403,
+      "body": {
+        "ok": false,
+        "error": "forbidden"
+      }
+    },
+    {
+      "check": "missing-token",
+      "status": 403,
+      "body": {
+        "ok": false,
+        "error": "verification_failed"
+      }
+    }
+  ]
+}

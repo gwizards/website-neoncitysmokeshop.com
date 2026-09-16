@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VideoHero from '../components/VideoHero.astro';
+import SupportSections from '../components/SupportSections.astro';
+import { site, topics } from '../../shared/site';
+const sitekey = site.turnstileSitekey;
+---
+<Layout title="Information & support" description="Contact Neon City about administration, website accessibility, privacy, and website feedback.">
+  <VideoHero />
+  <section id="about" class="about-section"><div class="shell about-grid"><div class="brand-panel"><img src="/images/neon-city-logo.webp" width="768" height="301" alt="Neon City" /></div><div><p class="eyebrow">About this website</p><h2>Here to help</h2><p>Questions about our website, privacy, or administration? Start a conversation with the Neon City team.</p><p>This website provides a direct way to share accessibility concerns, ask about your information, and send administrative correspondence.</p><a class="button" href="#support">Contact the team <span aria-hidden="true">›</span></a></div></div></section>
+  <SupportSections />
+  <section id="support" class="contact-section"><div class="contact shell">
+    <div class="contact-copy"><p class="eyebrow">LET’S TALK</p><h2>How can<br />we help?</h2><p>Choose a topic and leave a message. Include the details we need to understand your request.</p><div class="email-block"><span>PREFER EMAIL?</span><a href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">↗</span></a></div><p class="muted">For administrative and website support only. Please don’t include payment details, identity documents, or other sensitive information.</p></div>
+    <form id="contact-form" aria-labelledby="form-title">
+      <h3 id="form-title">Send a message</h3>
+      <p class="disclosure">This is a test form. Messages go to the development review inbox.</p>
+      <div class="field-pair"><label>Your name<input name="name" autocomplete="name" required minlength="2" maxlength="100" /></label><label>Email address<input name="email" type="email" autocomplete="email" required maxlength="254" /></label></div>
+      <label>What is this about?<select name="topic" required><option value="">Choose a topic</option>{topics.map(topic => <option value={topic}>{topic}</option>)}</select></label>
+      <label>Your message<textarea name="message" rows="5" required minlength="20" maxlength="3000" placeholder="How can we help? (At least 20 characters)"></textarea></label>
+      <label class="trap" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label>
+      <label class="consent"><input type="checkbox" name="consent" required /><span>I agree to the processing described in the <a href="/privacy/">privacy notice</a> so the team can respond.</span></label>
+      <p class="disclosure">Cloudflare provides bot protection and approximate request context. Resend delivers your message. <a href="/privacy/">Learn what is included.</a></p>
+      <div id="turnstile-widget" data-sitekey={sitekey}></div>
+      <button class="button" type="submit" disabled>Send message <span aria-hidden="true">↗</span></button>
+      <p id="form-status" role="status" aria-live="polite">Loading secure form…</p>
+      <noscript><p>JavaScript is required for secure submissions. Please use the email link to contact us.</p></noscript>
+    </form>
+  </div></section>
+  <script src="../scripts/contact.ts"></script>
+</Layout>

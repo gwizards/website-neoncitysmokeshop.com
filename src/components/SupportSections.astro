@@ -1,0 +1,20 @@
+---
+import { site } from '../../shared/site';
+const cards = [
+  { number: '01', title: 'Administration', text: 'Send general correspondence to the team.', href: '#support' },
+  { number: '02', title: 'Accessibility', text: 'Describe a page or interaction that is difficult to use.', href: '#support' },
+  { number: '03', title: 'Privacy requests', text: 'Ask about information you have shared with us.', href: '#support' },
+  { number: '04', title: 'Website feedback', text: 'Report a broken link, unclear detail, or website issue.', href: '#support' },
+  { number: '05', title: 'Direct email', text: 'Use your email app to send your message.', href: `mailto:${site.email}` },
+  { number: '06', title: 'Privacy notice', text: 'Read how this support website handles your information.', href: '/privacy/' },
+];
+const questions = [
+  { question: 'What can I use this website for?', answer: 'This website is for general administration, website accessibility, privacy requests, and website feedback. Select the relevant topic in the contact form so the team can understand your message.' },
+  { question: 'Where do development test messages go?', answer: 'Messages submitted through this preview go to the development review inbox. This is displayed beside the form. The email link opens the public contact address in your email app.' },
+  { question: 'What should I include in an accessibility report?', answer: 'Include the page address, what you were trying to do, and the problem you encountered. If useful, tell us which browser or assistive technology you were using. Do not include passwords or sensitive personal information.' },
+  { question: 'What if the form does not send?', answer: 'Check the required fields and complete the security verification. If delivery cannot be confirmed, retry once or use the email link. A successful submission displays a confirmation below the button.' },
+];
+---
+<section id="information" class="information-section"><div class="shell"><p class="eyebrow">Find the right place</p><h2>Information & support</h2><div class="support-grid"><div class="support-column">{cards.slice(0,3).map(card => <a class="support-card" href={card.href}><span class="support-number" aria-hidden="true">{card.number}</span><div><h3>{card.title}</h3><p>{card.text}</p></div><span class="support-arrow" aria-hidden="true">›</span></a>)}</div><div class="support-center" aria-hidden="true"><div class="neon-frame"><img src="/images/neon-city-logo.webp" width="768" height="301" alt="" loading="lazy" /></div></div><div class="support-column">{cards.slice(3).map(card => <a class="support-card" href={card.href}><span class="support-number" aria-hidden="true">{card.number}</span><div><h3>{card.title}</h3><p>{card.text}</p></div><span class="support-arrow" aria-hidden="true">›</span></a>)}</div></div></div></section>
+<section id="questions" class="questions-section"><div class="shell questions-grid"><div><p class="eyebrow">Before you get in touch</p><h2>A little more<br />information</h2><p>Useful details about this support website and sending a message.</p></div><div class="questions-list">{questions.map(item => <details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
+<section class="contact-banner"><div class="shell"><p class="eyebrow">Contact</p><h2>Start a conversation</h2><p>Choose a topic, share the details, and tell us how to reach you.</p><a class="button" href="#support">Contact us <span aria-hidden="true">›</span></a></div></section>

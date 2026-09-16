@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "neon-city-support-dev",
+  "account_id": "b1f3256ea310e5e1accb187d34911ebe",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-16",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "dev.neoncitysmokeshop.com", "custom_domain": true }],
+  "assets": { "directory": "dist", "binding": "ASSETS", "run_worker_first": true, "not_found_handling": "404-page", "html_handling": "force-trailing-slash" },
+  "vars": {
+    "SITE_ORIGIN": "https://dev.neoncitysmokeshop.com",
+    "TURNSTILE_HOSTNAMES": "dev.neoncitysmokeshop.com",
+    "MAIL_FROM": "Neon City Support <neoncity@updates.wizards.us>",
+    "MAIL_TO": "fernando@wizards.global"
+  },
+  "ratelimits": [{ "name": "CONTACT_RATE_LIMITER", "namespace_id": "9162601", "simple": { "limit": 5, "period": 60 } }],
+  "observability": { "enabled": true, "logs": { "enabled": true, "invocation_logs": false, "head_sampling_rate": 0.1 } }
+}

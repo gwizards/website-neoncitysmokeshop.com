@@ -1,0 +1,3 @@
+RESEND_API_KEY=replace_in_ignored_local_file
+TURNSTILE_SECRET=replace_in_ignored_local_file
+RATE_LIMIT_PEPPER=replace_with_random_secret
