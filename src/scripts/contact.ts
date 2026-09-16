@@ -8,13 +8,17 @@ const widget = document.querySelector<HTMLElement>('#turnstile-widget')!;
 let token = '';
 let widgetId: string | undefined;
 let busy = false;
+let verificationMessage = true;
+const showVerification = (message: string) => {
+  if (!busy) { verificationMessage = true; status.textContent = message; }
+};
 window.neonTurnstileReady = () => {
   widgetId = window.turnstile?.render(widget, {
-    sitekey: widget.dataset.sitekey, action: 'support', theme: 'dark', size: window.matchMedia('(max-width: 380px)').matches ? 'compact' : 'flexible',
-    callback: (value: string) => { token = value; button.disabled = busy; if (!busy && ['Loading secure form…', 'Please complete the security verification above.'].includes(status.textContent || '')) status.textContent = ''; },
-    'before-interactive-callback': () => { status.textContent = 'Please complete the security verification above.'; },
-    'expired-callback': () => { token = ''; button.disabled = true; },
-    'error-callback': () => { token = ''; button.disabled = true; status.textContent = 'Verification could not load. Refresh this page or use the email link.'; },
+    sitekey: widget.dataset.sitekey, action: 'support', theme: 'dark', size: 'compact',
+    callback: (value: string) => { token = value; button.disabled = busy; if (!busy && verificationMessage) { status.textContent = ''; verificationMessage = false; } },
+    'before-interactive-callback': () => { if (verificationMessage) showVerification('Please complete the security verification above.'); },
+    'expired-callback': () => { token = ''; button.disabled = true; showVerification('Verification expired. Please complete the security verification again.'); },
+    'error-callback': () => { token = ''; button.disabled = true; showVerification('Verification could not load. Refresh this page or use the email link.'); },
   });
 };
 const script = document.createElement('script');
@@ -25,7 +29,7 @@ document.head.append(script);
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (busy || !token || !form.reportValidity()) return;
-  busy = true; button.disabled = true; form.setAttribute('aria-busy', 'true'); status.textContent = 'Sending your message…';
+  busy = true; verificationMessage = false; button.disabled = true; form.setAttribute('aria-busy', 'true'); status.textContent = 'Sending your message…';
   const data = new FormData(form);
   const payload = { name: data.get('name'), email: data.get('email'), topic: data.get('topic'), message: data.get('message'), website: data.get('website'), consent: data.get('consent') === 'on', token };
   try {
