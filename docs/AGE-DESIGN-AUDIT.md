@@ -69,4 +69,20 @@ screen-reader coverage, and production launch remain separate review items.
   exact header logo, restored portrait layouts, six source icons, and three-column geometry.
 - Full-page Chromium inspection found no horizontal overflow at either audited viewport.
 - Automated quality passed with 27 tests, zero Astro/type diagnostics, the static artifact
-  audit, and the Wrangler dry run. Live edge evidence is added after deployment.
+  audit, and the Wrangler dry run.
+
+## Dev edge evidence
+
+- The first source-parity deployment produced Cloudflare Worker version
+  `d1093ba8-3799-453b-8332-a3167a6d48b3` at `dev.neoncitysmokeshop.com`.
+- Edge requests returned `200` for `/`, `/privacy/`, `/robots.txt`, `/version.json`, the
+  restored full logo, and the restored MP4; an unknown route and `/sitemap.xml` returned
+  `404` as intended for the non-indexable preview.
+- Every checked response carried `X-Robots-Tag: noindex, nofollow, noarchive`; the MP4 and
+  restored logo used `video/mp4` and `image/webp` content types.
+- The edge HTML contained the age-gate questions and all principal source-derived section
+  headings. A fresh Chrome session visibly opened on the gate; after accepting, Chrome
+  rendered the original header logo and hero footage, the framed About portrait, and the
+  three-column category layout with all six original icons.
+- The final release handoff records the subsequent documentation commit and Cloudflare
+  version so Git, `/version.json`, and the deployed Worker can be compared exactly.
