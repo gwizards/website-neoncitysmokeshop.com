@@ -150,9 +150,8 @@ nav .header-order:hover{background:#a80697;color:#fff}
   .site-header .header-inner{min-height:82px;padding-block:10px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
   .site-header .brand img{width:168px;height:auto}
   .site-header .menu-toggle{display:inline-flex;justify-self:end}
-  .site-header .primary-nav{grid-column:1/-1;display:flex;width:100%;padding:8px 0 14px;align-items:stretch;gap:4px;flex-direction:column}
-  .site-header.nav-ready .primary-nav{display:none}
-  .site-header.nav-ready.menu-open .primary-nav{display:flex;max-height:calc(100svh - 102px);overflow:auto}
+  .site-header .primary-nav{grid-column:1/-1;display:none;width:100%;padding:8px 0 14px;align-items:stretch;gap:4px;flex-direction:column}
+  .site-header.menu-open .primary-nav{display:flex;max-height:calc(100svh - 102px);overflow:auto}
   .site-header .primary-nav a{width:100%;min-height:48px;padding:11px 14px;justify-content:flex-start;border-bottom:1px solid #28232d;font-size:13px}
   .site-header .primary-nav .header-contact,.site-header .primary-nav .header-order{margin-top:6px;justify-content:center;border:0;padding:13px 16px}
 }

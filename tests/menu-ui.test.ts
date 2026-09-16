@@ -36,7 +36,7 @@ async function mount() {
 
 afterEach(() => vi.unstubAllGlobals());
 
-it('enhances the fallback navigation and exposes the compact menu button', async () => {
+it('initializes the compact navigation and exposes its menu button', async () => {
   const page = await mount();
   expect(page.classes.has('nav-ready')).toBe(true);
   expect(page.toggle.hidden).toBe(false);
