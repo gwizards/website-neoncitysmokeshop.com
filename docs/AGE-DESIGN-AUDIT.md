@@ -22,8 +22,9 @@ This document is the follow-up acceptance record for that same goal.
 - The three-column category section has three icon-and-copy items on each side of
   `pexels-aviz-3794457.jpg`, also framed in magenta/cyan.
 - The lower contact callout uses the abstract colored-smoke video and cyan-to-black overlay.
-- The live site contains Order Online and external shopping behavior. Those are not copied
-  into this dev preview; it states that it does not process purchases.
+- The live site contains an Order Online handoff to the existing QuickVee merchant. The dev
+  preview now restores that exact outbound link after the age gate while keeping all cart,
+  checkout, inventory, and payment behavior outside this Astro application.
 
 ## Implemented parity
 
@@ -100,5 +101,6 @@ screen-reader coverage, and production launch remain separate review items.
   title, About button label, category-to-contact section order, and footer location, hours,
   phone, email, Instagram, TikTok, copyright, and designer attribution.
 - Kept the protected development contact form immediately after the source-derived homepage
-  sections because it is part of the approved migration work. The preview still has no order
-  button, cart, checkout, inventory, or purchase processing.
+  sections because it is part of the approved migration work. The source Order Online button
+  is an external QuickVee handoff; the preview has no local cart, checkout, inventory, or
+  purchase processing.

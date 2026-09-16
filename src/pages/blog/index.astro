@@ -1,0 +1,14 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import posts from '../../data/blog.json';
+const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T12:00:00Z`));
+---
+<Layout title="Blog · Neon City" description="Source articles from the Neon City Smoke Shop archive about pipes, cigars, hookahs, vapes, and smoking-accessory care.">
+  <section class="page-hero"><div class="shell"><p class="eyebrow">Neon City blog</p><h1>Journey into the vaping universe</h1><p>Explore the original Neon City archive of stories, tips, product-care guides, and industry information. This development migration preserves the published source material for review.</p></div></section>
+  <section class="blog-index"><div class="shell blog-grid">
+    {posts.map(post => <article class="blog-card">
+      <a class="blog-card-image" href={`/${post.slug}/`}><img src={post.image} width="960" height="640" loading="lazy" alt={post.imageAlt} /></a>
+      <div class="blog-card-copy"><p class="blog-meta"><span>Blog</span> · <time datetime={post.date}>{formatDate(post.date)}</time></p><h2><a href={`/${post.slug}/`}>{post.title}</a></h2><p>{post.description}</p><a class="blog-read" href={`/${post.slug}/`}>Read article <span aria-hidden="true">›</span></a></div>
+    </article>)}
+  </div></section>
+</Layout>
