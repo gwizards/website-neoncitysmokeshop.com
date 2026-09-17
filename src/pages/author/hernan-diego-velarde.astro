@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import posts from '../../data/blog.json';
 const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}T12:00:00Z`));
 ---
-<Layout title="Neon City Article Archive" description="Browse the complete source article archive migrated from the Neon City Smoke Shop website.">
+<Layout title="Neon City Article Archive" description="Browse the complete source article archive migrated from the Neon City Smoke Shop website." indexable={false}>
   <section class="page-hero"><div class="shell"><p class="eyebrow">Legacy author archive</p><h1>Neon City articles</h1><p>This route preserves the original site’s author archive without adding an unverified biography.</p></div></section>
   <section class="blog-index"><div class="shell compact-post-list">{posts.map(post => <article><p class="blog-meta"><time datetime={post.date}>{formatDate(post.date)}</time></p><h2><a href={`/${post.slug}/`}>{post.title}</a></h2><p>{post.description}</p></article>)}</div></section>
 </Layout>

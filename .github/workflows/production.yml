@@ -1,0 +1,86 @@
+name: Production release
+
+run-name: Production from main ${{ github.sha }}
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: neon-city-production
+  cancel-in-progress: false
+
+jobs:
+  validate-and-deploy:
+    if: github.repository == 'gwizards/website-neoncitysmokeshop.com' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: production
+      url: https://neoncitysmokeshop.com
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      RELEASE_SHA: ${{ github.sha }}
+
+    steps:
+      - name: Check out the triggering main commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Use Node 22
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify deployment credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${CLOUDFLARE_ACCOUNT_ID}" || { echo "::error::CLOUDFLARE_ACCOUNT_ID is missing"; exit 1; }
+          test -n "${CLOUDFLARE_API_TOKEN}" || { echo "::error::CLOUDFLARE_API_TOKEN is missing"; exit 1; }
+
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - name: Validate the production artifact and Cloudflare configuration
+        run: npm run quality:production
+
+      - name: Verify required production Worker secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx wrangler secret list --env production > /tmp/worker-secrets.json
+          node - <<'NODE'
+          const names=new Set(JSON.parse(require('fs').readFileSync('/tmp/worker-secrets.json','utf8')).map(item=>item.name));
+          for(const name of ['RESEND_API_KEY','TURNSTILE_SECRET','RATE_LIMIT_PEPPER'])if(!names.has(name))throw new Error(`${name} is missing from the production Worker`);
+          NODE
+
+      - name: Refuse to deploy a superseded main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin main
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test "$(git rev-parse origin/main)" = "${GITHUB_SHA}" || { echo "::error::A newer main commit exists"; exit 1; }
+
+      - name: Deploy the exact main build
+        run: npx wrangler deploy --env production --message "GitHub main ${GITHUB_SHA}"
+
+      - name: Verify the production edge
+        run: npm run verify:production
+
+      - name: Record release evidence
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Neon City production release"
+            echo ""
+            echo "- Main commit: \`${GITHUB_SHA}\`"
+            echo "- Production: https://neoncitysmokeshop.com"
+            echo "- Result: \`${{ job.status }}\`"
+          } >> "${GITHUB_STEP_SUMMARY}"

@@ -1,23 +1,21 @@
-# Neon City support preview
+# Neon City website
 
-Site id: `neoncitysmokeshop`. Read `README.md` and `docs/IMPLEMENTATION.md` first.
+Site id: `neoncitysmokeshop`. Read `README.md`, `docs/IMPLEMENTATION.md`, and
+`docs/PRODUCTION-RELEASE.md` first.
 
-This repository is an age-gated informational and administrative support preview authorized
-for `https://dev.neoncitysmokeshop.com`. Source-derived product-category information, blog
-content, and brand imagery may be shown for migration fidelity. The source Order Online link
-may hand an age-confirmed visitor off to the existing QuickVee merchant; do not implement an
-embedded storefront, cart, checkout, inventory, or production route. Production WordPress
-remains separate.
+This repository contains the age-gated Neon City Smoke Shop Astro website. Source-derived
+product-category information, blog content, and brand imagery may be shown for migration
+fidelity. Order Online hands age-confirmed visitors to the existing QuickVee merchant; do not
+implement an embedded storefront, cart, checkout, inventory, or payment processing.
 
 - Preserve existing user work. Do not commit or push without authorization.
-- Run `npm run quality` before deploying. Use the exact dev Wrangler configuration.
-- Secrets belong only in ignored `.dev.vars` and Cloudflare secrets.
-- Keep the dev recipient at the owner's review inbox until a separately approved change.
-- Keep HTML noindex, Worker X-Robots-Tag, and robots disallow. No sitemap or llms file.
-- Use `$maintain-sitemaps`, `$maintain-discovery-surfaces`, and
-  `$audit-web-discoverability` with site id `neoncitysmokeshop` for discovery changes.
-- Use the portfolio's `$implement-resend-cloudflare` for form changes.
-- Source identity is at `/version.json`; an unborn Git repository must report a
-  null commit and a deterministic source checksum, never an invented commit.
-
-Deployment authority currently covers the dev subdomain only.
+- Run `npm run quality` for dev changes and `npm run quality:production` before production work.
+- Secrets belong only in ignored local files, Cloudflare Worker secrets, and GitHub Actions secrets.
+- Production releases come only from the exact `main` commit through `.github/workflows/production.yml`.
+- Keep `dev.neoncitysmokeshop.com` noindex with no sitemap or llms file.
+- Production uses canonical apex URLs, redirects `www`, and publishes source-derived robots,
+  sitemap, and llms surfaces. Do not change search-platform accounts without separate authorization.
+- Use `$maintain-sitemaps`, `$maintain-discovery-surfaces`, and `$audit-web-discoverability`
+  for discovery changes, and `$implement-resend-cloudflare` for form changes.
+- Source identity is at `/version.json`; an unborn Git repository must report a null commit and
+  deterministic source checksum, never an invented commit.

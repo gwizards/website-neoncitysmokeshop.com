@@ -13,8 +13,13 @@
     "types": "wrangler types",
     "test": "vitest run",
     "audit": "node scripts/audit.mjs",
-    "cf:check": "wrangler deploy --dry-run",
-    "quality": "npm run check && npm test && npm run build && npm run audit && npm run cf:check"
+    "cf:check": "wrangler deploy --env=\"\" --dry-run",
+    "quality": "npm run check && npm test && npm run build && npm run audit && npm run cf:check",
+    "build:production": "DEPLOY_ENV=production PUBLIC_DEPLOY_ENV=production astro build && DEPLOY_ENV=production node scripts/finalize.mjs",
+    "audit:production": "DEPLOY_ENV=production node scripts/audit.mjs",
+    "cf:check:production": "wrangler deploy --env production --dry-run",
+    "quality:production": "npm run check && npm test && npm run build:production && npm run audit:production && npm run cf:check:production",
+    "verify:production": "node scripts/verify-production.mjs"
   },
   "dependencies": {
     "astro": "7.3.2"

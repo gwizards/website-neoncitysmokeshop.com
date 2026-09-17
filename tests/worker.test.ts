@@ -61,6 +61,15 @@ describe('support delivery boundary',()=>{
   expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/about/'),assetEnv)).headers.get('Cache-Control')).toBe('no-store');
   expect((await worker.fetch(new Request(env.SITE_ORIGIN+'/version.json'),assetEnv)).headers.get('Cache-Control')).toBe('no-store');
  });
+ it('allows production pages to be indexed and redirects www to the canonical apex',async()=>{
+  const production={...env,SITE_ORIGIN:'https://neoncitysmokeshop.com',TURNSTILE_HOSTNAMES:'neoncitysmokeshop.com,www.neoncitysmokeshop.com',ASSETS:{fetch:vi.fn(async()=>new Response('page',{status:200}))}} as any;
+  const page=await worker.fetch(new Request('https://neoncitysmokeshop.com/about/'),production);
+  expect(page.headers.has('X-Robots-Tag')).toBe(false);
+  const legacy=await worker.fetch(new Request('https://neoncitysmokeshop.com/author/hernan-diego-velarde/'),production);
+  expect(legacy.headers.get('X-Robots-Tag')).toContain('noindex');
+  const redirect=await worker.fetch(new Request('https://www.neoncitysmokeshop.com/blog/?source=www'),production);
+  expect(redirect.status).toBe(308);expect(redirect.headers.get('Location')).toBe('https://neoncitysmokeshop.com/blog/?source=www');
+ });
 });
 describe('notification context and escaping',()=>{
  it('omits unavailable context and raw IP',()=>{const c=requestContext(request());expect(JSON.stringify(c)).not.toMatch(/192\.0\.2\.1|undefined/);});

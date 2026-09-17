@@ -1,59 +1,49 @@
-# Neon City information and support
+# Neon City Smoke Shop
 
-Approved age-gated informational and administrative Astro website at https://dev.neoncitysmokeshop.com.
-This is a development preview, not a replacement of the commercial WordPress site, and it
-does not process purchases.
+Astro and Cloudflare Worker website for [neoncitysmokeshop.com](https://neoncitysmokeshop.com),
+with an isolated preview at [dev.neoncitysmokeshop.com](https://dev.neoncitysmokeshop.com).
+The site is age-gated and links external online orders to the existing QuickVee merchant. It
+does not implement inventory, a cart, checkout, or payments.
 
 ## Development
 
-Node 22.12+ is required. Run `npm ci`, `npm run types`, then `npm run quality`.
-Use `npm run dev` for Astro UI development. For Worker behavior use `wrangler dev`
-with a local-only configuration whose origin/expected hostname match the local server.
-Never widen the deployed expected-hostname allowlist to include localhost.
+Node 22.12+ is required. Run `npm ci`, `npm run types`, then `npm run quality`. Use
+`npm run dev` for Astro UI development. The real public Turnstile sitekey is in
+`shared/site.ts`; secrets stay in ignored `.dev.vars` and Cloudflare Worker secrets.
 
-The real widget sitekey is public in `shared/site.ts`. Set `RESEND_API_KEY`,
-`TURNSTILE_SECRET`, and `RATE_LIMIT_PEPPER` in ignored `.dev.vars` for local API work.
-`.dev.vars.example` contains placeholders. Cloudflare secrets are configured separately.
+## Environments
 
-## Preview delivery
+The default Wrangler environment is the noindex development Worker on
+`dev.neoncitysmokeshop.com`. It blocks crawling and publishes no canonical, sitemap, or
+`llms.txt` artifact.
 
-The Worker `neon-city-support-dev` serves static Astro assets and `/api/contact`.
-Messages go to `fernando@wizards.global` for development review. The visible email
-alternative is the source site's public administrative address.
-The sender is `Neon City Support <neoncity@updates.wizards.us>`.
-No automatic visitor confirmation is sent.
+The `production` Wrangler environment is the public Worker on `neoncitysmokeshop.com` and
+`www.neoncitysmokeshop.com`. The Worker redirects `www` to the canonical apex. Production
+builds publish canonical metadata, indexable headers, `robots.txt`, `sitemap.xml`, and
+`llms.txt`; legacy utility routes remain noindex.
 
-Deploy only with this repository's `wrangler.jsonc`. It contains only the dev custom
-domain and disables workers.dev and version preview URLs. The root and www website
-are not part of this deployment. No production configuration is provided.
+Run `npm run quality:production` to validate the complete production artifact. Production
+releases are made by `.github/workflows/production.yml` from the exact `main` commit. The
+workflow refuses stale commits, verifies required Worker secrets, deploys, and audits the
+public edge against `/version.json`.
 
-## Verification
+## Contact delivery
 
-`npm run quality` runs framework/type checks, security and email-contract tests,
-static build, preview artifact audit, and a Wrangler dry run. `docs/edge-validation.json`
-records the live HTTP checks. `/version.json` identifies the source by SHA-256 and
-Git commit. `committed` is true only when the build starts from a clean Git checkout.
-The development branch is `codex/support-dev`.
+The Worker protects `/api/contact` with same-origin checks, strict validation, Cloudflare
+Turnstile, rate limiting, and Resend. Messages go to `fernando@wizards.global`; the visible
+public email remains `neoncitysmokeshop@gmail.com`. No automatic visitor confirmation is sent.
+Development and production use separate Turnstile widgets and Worker secrets.
 
 ## Backup
 
 The original SiteGround files and database were exported, packaged, uploaded to
 [the private Drive recovery folder](https://drive.google.com/drive/folders/1VbAbuEw1kr88pwfRLwQdxLpF488DdwN0),
-then downloaded and checksum-verified. The folder includes reconstruction instructions.
-No database export, customer data, credentials, or backup archive belongs in this repository.
+then downloaded and checksum-verified. No backup archive, database export, customer data, or
+credential belongs in this repository.
 
-## Release and rollback boundary
+## Release identity and rollback
 
-Only the `dev.neoncitysmokeshop.com` custom domain points to this Worker. Subsequent
-dev releases can be rolled back with `wrangler rollback <version-id>` after confirming
-the target with `wrangler deployments list`. Rollback of code does not roll back secret
-values or DNS. Initial launch can be withdrawn by removing this dev custom domain;
-do not remove the zone, apex/www records, or unrelated Workers. Production restoration
-from the SiteGround backup is a separate procedure and has not been rehearsed.
-
-## Decorative video
-
-The hero uses the original `Neon-Final.mp4` footage recovered from the SiteGround
-backup, re-encoded without audio and held until the visitor confirms they are 21 or older.
-An original abstract colored-smoke still remains on the contact section. See
-`docs/ORIGINAL-VIDEO.md` for provenance and original section mapping.
+`/version.json` records the source commit, deterministic checksum, environment, and build time.
+Cloudflare Worker versions provide code rollback; a code rollback does not restore DNS,
+secrets, external email state, or the prior SiteGround application. See
+`docs/PRODUCTION-RELEASE.md` for current release evidence and rollback steps.

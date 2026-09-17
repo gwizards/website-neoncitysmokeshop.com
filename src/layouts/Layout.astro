@@ -2,8 +2,9 @@
 import '../styles/site.css';
 import AgeGate from '../components/AgeGate.astro';
 import { site } from '../../shared/site';
-interface Props { title: string; description: string; image?: string; pageType?: 'website' | 'article'; schema?: Record<string, unknown> | Record<string, unknown>[] }
-const { title, description, image = '/images/neon-city-full-logo.webp', pageType = 'website', schema } = Astro.props;
+interface Props { title: string; description: string; image?: string; pageType?: 'website' | 'article'; schema?: Record<string, unknown> | Record<string, unknown>[]; indexable?: boolean }
+const { title, description, image = '/images/neon-city-full-logo.webp', pageType = 'website', schema, indexable = true } = Astro.props;
+const production = import.meta.env.PUBLIC_DEPLOY_ENV === 'production';
 const pageUrl = new URL(Astro.url.pathname, site.origin).href;
 const imageUrl = new URL(image, site.origin).href;
 const business = {
@@ -40,7 +41,8 @@ const jsonLd = JSON.stringify(graph).replaceAll('<', '\\u003c');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="robots" content={production && indexable ? 'index, follow' : 'noindex, nofollow, noarchive'} />
+    {production && indexable && <link rel="canonical" href={pageUrl} />}
     <meta name="theme-color" content="#ca06b5" />
     <meta property="og:site_name" content={site.legalName} />
     <meta property="og:type" content={pageType} />
@@ -60,10 +62,10 @@ const jsonLd = JSON.stringify(graph).replaceAll('<', '\\u003c');
   <body>
     <AgeGate />
     <a class="skip" href="#main">Skip to content</a>
-    <div class="preview"><span class="preview-source">Anybody who’s 21+ and enjoys smoking a cigarette, or perhaps something more relaxing</span><span class="preview-note">Development preview</span></div>
+    <div class="preview"><span class="preview-source">Anybody who’s 21+ and enjoys smoking a cigarette, or perhaps something more relaxing</span>{!production && <span class="preview-note">Development preview</span>}</div>
     <header class="site-header"><div class="shell header-inner"><a class="brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-header-logo.webp" width="250" height="98" alt="Neon City Smoke Shop" /></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" hidden><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>Menu</span></button><nav id="primary-nav" class="primary-nav" aria-label="Main navigation"><a href="/about/">About</a><a href="/products-services/">Products &amp; services</a><a href="/location/">Location</a><a href="/blog/">Blog</a><a class="header-contact" href="/contact-us/">Contact us</a><a class="header-order" href="https://quickvee.com/merchant/MAR630037NV?orderMethod=delivery" target="_blank" rel="noopener noreferrer" aria-label="Order online through QuickVee (opens in a new tab)">Order online</a></nav></div></header>
     <script src="../scripts/menu.ts"></script>
     <main id="main" tabindex="-1"><slot /></main>
-    <footer id="location"><div class="shell footer-inner"><a class="footer-brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-display-logo.webp" width="640" height="279" loading="lazy" alt="Neon City Smoke Shop" /></a><div><h2>Main menu</h2><a href="/">Home</a><a href="/about/">About us</a><a href="/products-services/">Products and services</a><a href="/location/">Location</a><a href="/blog/">Blog</a><a href="/contact-us/">Contact us</a><a href="/privacy/">Privacy notice</a></div><div class="footer-contact"><h2>Contact</h2><a href="https://goo.gl/maps/NhAz5iJgZurPDRQs7" rel="noopener noreferrer"><span aria-hidden="true">⌖</span>7175 W Lake Mead #162 Las Vegas NV 89128</a><p><span aria-hidden="true">◷</span>Monday - Thursday: 10am - 8pm</p><p><span aria-hidden="true">◷</span>Friday - Saturday: 10am - 9pm</p><p><span aria-hidden="true">◷</span>Sunday: 10am - 7pm</p><a href="tel:+17252931435"><span aria-hidden="true">☎</span>7252931435</a><a href="mailto:neoncitysmokeshop@gmail.com"><span aria-hidden="true">✉</span>neoncitysmokeshop@gmail.com</a><a href="https://www.instagram.com/neoncitysmokeshop/" rel="noopener noreferrer"><span aria-hidden="true">◎</span>Neoncitysmokeshop</a><a href="https://www.tiktok.com/@neoncitysmokeshop" rel="noopener noreferrer"><span aria-hidden="true">♪</span>Neoncitysmokeshop</a></div></div><div class="shell footer-legal"><span>Copyright © 2023. All rights reserved.</span><span>Development preview · <a href="https://wizards.us/" rel="noopener noreferrer">Web Design by Global Wizards</a></span></div></footer>
+    <footer id="location"><div class="shell footer-inner"><a class="footer-brand" href="/" aria-label="Neon City home"><img src="/images/neon-city-display-logo.webp" width="640" height="279" loading="lazy" alt="Neon City Smoke Shop" /></a><div><h2>Main menu</h2><a href="/">Home</a><a href="/about/">About us</a><a href="/products-services/">Products and services</a><a href="/location/">Location</a><a href="/blog/">Blog</a><a href="/contact-us/">Contact us</a><a href="/privacy/">Privacy notice</a></div><div class="footer-contact"><h2>Contact</h2><a href="https://goo.gl/maps/NhAz5iJgZurPDRQs7" rel="noopener noreferrer"><span aria-hidden="true">⌖</span>7175 W Lake Mead #162 Las Vegas NV 89128</a><p><span aria-hidden="true">◷</span>Monday - Thursday: 10am - 8pm</p><p><span aria-hidden="true">◷</span>Friday - Saturday: 10am - 9pm</p><p><span aria-hidden="true">◷</span>Sunday: 10am - 7pm</p><a href="tel:+17252931435"><span aria-hidden="true">☎</span>7252931435</a><a href="mailto:neoncitysmokeshop@gmail.com"><span aria-hidden="true">✉</span>neoncitysmokeshop@gmail.com</a><a href="https://www.instagram.com/neoncitysmokeshop/" rel="noopener noreferrer"><span aria-hidden="true">◎</span>Neoncitysmokeshop</a><a href="https://www.tiktok.com/@neoncitysmokeshop" rel="noopener noreferrer"><span aria-hidden="true">♪</span>Neoncitysmokeshop</a></div></div><div class="shell footer-legal"><span>Copyright © 2023. All rights reserved.</span><span>{!production && 'Development preview · '}<a href="https://wizards.us/" rel="noopener noreferrer">Web Design by Global Wizards</a></span></div></footer>
   </body>
 </html>

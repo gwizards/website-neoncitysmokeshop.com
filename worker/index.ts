@@ -1,6 +1,6 @@
 import { topics } from '../shared/site';
 import { requestContext } from './context';
-type Bindings = Env & { RESEND_API_KEY?: string; TURNSTILE_SECRET?: string; RATE_LIMIT_PEPPER?: string };
+type Bindings = Omit<Env,'RESEND_API_KEY'|'TURNSTILE_SECRET'|'RATE_LIMIT_PEPPER'> & { RESEND_API_KEY?: string; TURNSTILE_SECRET?: string; RATE_LIMIT_PEPPER?: string };
 type Payload = { name: string; email: string; topic: string; message: string; consent: true };
 export const escapeHtml = (value: string) => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const json = (status: number, error?: string) => Response.json(error ? {ok:false,error} : {ok:true}, {status,headers:{'Cache-Control':'no-store'}});
@@ -57,12 +57,16 @@ export async function contact(request: Request, env: Bindings): Promise<Response
 }
 const csp="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
 export default { async fetch(request: Request, env: Bindings): Promise<Response> {
-  const path=new URL(request.url).pathname;
+  const url=new URL(request.url),path=url.pathname;
+  const production=env.SITE_ORIGIN==='https://neoncitysmokeshop.com';
   let response:Response;
-  try { response=path.startsWith('/api/') ? path==='/api/contact' ? await contact(request,env) : json(404,'not_found') : await env.ASSETS.fetch(request); }
+  try {
+    if(production&&url.hostname==='www.neoncitysmokeshop.com')response=Response.redirect(`https://neoncitysmokeshop.com${url.pathname}${url.search}`,308);
+    else response=path.startsWith('/api/') ? path==='/api/contact' ? await contact(request,env) : json(404,'not_found') : await env.ASSETS.fetch(request);
+  }
   catch {response=json(503,'unavailable');}
   const out=new Response(response.body,response);
-  out.headers.set('X-Robots-Tag','noindex, nofollow, noarchive');
+  if(!production||response.status>=400||path.startsWith('/api/')||path==='/version.json'||path.startsWith('/author/')||path==='/thank-you-for-contacting-us/')out.headers.set('X-Robots-Tag','noindex, nofollow, noarchive');
   out.headers.set('Content-Security-Policy',csp);
   out.headers.set('X-Content-Type-Options','nosniff');
   out.headers.set('Referrer-Policy','strict-origin-when-cross-origin');
