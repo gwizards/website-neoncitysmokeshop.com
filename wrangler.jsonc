@@ -22,8 +22,8 @@
       "workers_dev": false,
       "preview_urls": false,
       "routes": [
-        { "pattern": "neoncitysmokeshop.com", "custom_domain": true },
-        { "pattern": "www.neoncitysmokeshop.com", "custom_domain": true }
+        { "pattern": "neoncitysmokeshop.com/*", "zone_name": "neoncitysmokeshop.com" },
+        { "pattern": "www.neoncitysmokeshop.com/*", "zone_name": "neoncitysmokeshop.com" }
       ],
       "assets": { "directory": "dist", "binding": "ASSETS", "run_worker_first": true, "not_found_handling": "404-page", "html_handling": "force-trailing-slash" },
       "vars": {
