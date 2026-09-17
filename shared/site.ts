@@ -11,7 +11,7 @@ export const site = {
     postalCode: '89128',
     addressCountry: 'US',
   },
-  devTurnstileSitekey: '0x4AAAAAAE5CYyg6qgRz_jgw',
+  devTurnstileSitekey: '0x4AAAAAAE5qxpZHX7fwi9O-',
   productionTurnstileSitekey: '0x4AAAAAAE5eZ6zk7RCyG9HI',
 };
 export const topics = ['General administration', 'Website accessibility', 'Privacy request', 'Website feedback'] as const;
